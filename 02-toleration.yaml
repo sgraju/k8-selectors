@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: taint-tolerations
+  name: taints-tolerations
   # these are replica set labels
   labels:
     purpose: tolerations-demo
@@ -17,9 +17,17 @@ spec:
   template:
     metadata:
       labels:
+        # purpose: dp-demo
         purpose: tolerations-demo
         project: roboshop
     spec:
+      nodeSelector:
+        kubernetes.io/hostname: ip-192-168-30-245.ec2.internal
       containers:
       - name: nginx
-        image: nginx
+        image: nginx:latest
+      tolerations:
+      - key: "project"
+        operator: "Equal"
+        value: "roboshop"
+        effect: "NoSchedule"
